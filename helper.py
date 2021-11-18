@@ -16,16 +16,19 @@ def getNamespacePrefixes(lang):
     result = session.get(url=base_url, params=params)
     result = result.json()
     prefix_to_ns = {}
-   
+    #Get Image/Category
     if 'namespacealiases' in result.get('query', {}):
         for alias in result['query']['namespacealiases']:
+          if alias['id'] == 14 or alias['id'] == 6:
             prefix_to_ns[alias['alias']] = alias['id']
     if 'namespaces' in result.get('query', {}):
         for ns in result['query']['namespaces'].values():
-            if 'name' in ns:
-                prefix_to_ns[ns['name'].replace(' ', '_')] = ns['id']
-            if 'canonical' in ns:
-                prefix_to_ns[ns['canonical'].replace(' ', '_')] = ns['id']
+            if ns['id'] == 14 or ns['id'] == 6:
+              if 'name' in ns:
+                  prefix_to_ns[ns['name'].replace(' ', '_')] = ns['id']
+              if 'canonical' in ns:
+                  prefix_to_ns[ns['canonical'].replace(' ', '_')] = ns['id']
+              
     return prefix_to_ns
 
 def filterLinksByNs(links, keep_ns):
