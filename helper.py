@@ -1,6 +1,33 @@
 import mwparserfromhell as mw
 import requests
 
+
+
+def getNamespacePrefixes(lang):
+    session = requests.Session()
+    base_url = "https://{0}.wikipedia.org/w/api.php".format(lang)
+    params = {
+        "action": "query",
+        "meta": "siteinfo",
+        "siprop": "namespacealiases|namespaces",
+        "format": "json",
+        "formatversion": "2"
+    }
+    result = session.get(url=base_url, params=params)
+    result = result.json()
+    prefix_to_ns = {}
+   
+    if 'namespacealiases' in result.get('query', {}):
+        for alias in result['query']['namespacealiases']:
+            prefix_to_ns[alias['alias']] = alias['id']
+    if 'namespaces' in result.get('query', {}):
+        for ns in result['query']['namespaces'].values():
+            if 'name' in ns:
+                prefix_to_ns[ns['name'].replace(' ', '_')] = ns['id']
+            if 'canonical' in ns:
+                prefix_to_ns[ns['canonical'].replace(' ', '_')] = ns['id']
+    return prefix_to_ns
+
 def filterLinksByNs(links, keep_ns):
     """ Filters wikilinks by namespaces
     
