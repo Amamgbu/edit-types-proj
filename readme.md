@@ -13,4 +13,3 @@ pip install requirements.txt
 ```
 python3 diff.py
 ```
-
