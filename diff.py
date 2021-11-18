@@ -28,8 +28,6 @@ def get_diff_count(result):
                 prev_text = result["sections-prev"][r["section"]]
                 prev_text = prev_text[r['offset']:r['offset']+r['size']].replace("\n", "\\n")
                 is_edit_type_found,wikitext,edit_type = is_edit_type(prev_text,r['type'])
-                
-                print(edit_type,'remove')
                 if edit_types.get(edit_type,{}) and is_edit_type_found:
                     if edit_types.get(edit_type,{}).get('remove'):
                         edit_types[edit_type]['remove'] = edit_types.get(edit_type).get('remove') + 1
